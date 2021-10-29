@@ -4,37 +4,34 @@ public class JosephusProblem {
 
 	public static int[] solve(int m, int n) {
 		
-		int[] vectorAlives = new int[n];
-		int[] vectorDeaths = new int[n];
+		int[] positions = new int[n];
+		int[] sequenceEliminated = new int[n];
+		int countEliminated = 0;
+		int currentPosition = -1;	
 		
-		//Declarando o index/contador das pessoas vivas como 1 pois deve ser um valor acima do contador do looping abaixo:0
-		int indexAlives=1;
-		int indexDeaths=0;
-			
-		for(int i=0; i<n; i++) {
-			vectorAlives[i] = i;
-			vectorDeaths[i] = -1;
+		while(countEliminated < n) {
+			currentPosition = moveNext(positions, currentPosition, n, m);
+			positions[currentPosition] = -1;
+			sequenceEliminated[countEliminated] = currentPosition;
+			countEliminated++;
 		}		
-			
-			
-		while(vectorDeaths[n-1] == -1){						
-			int i=0;
-			while(i<n){
-				if(vectorAlives[i] != -1)  {
-					if(indexAlives == m) {						
-						vectorDeaths[indexDeaths] = vectorAlives[i];
-						indexDeaths++;
-						vectorAlives[i] = -1;
-						indexAlives=1;
-					}else {
-						indexAlives++;
-					}	
-				}					
-				i++;
-			}
-				
-		}
+		return sequenceEliminated;		
+	}
+	
+	public static int moveNext(int[] positions, int currentPosition, int n, int m) {		
 		
-		return vectorDeaths;
+		int individuals = 0;		
+		
+		while(individuals < m) {			
+			currentPosition++;
+			currentPosition = currentPosition % n;
+			
+			//Already eliminated?
+			if(positions[currentPosition] == -1) {
+				continue;
+			}
+			individuals++;
+		}		
+		return currentPosition;			
 	}
 }
